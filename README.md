@@ -18,10 +18,10 @@ In this repo are complete programs doing useful tasks in various languages.
 The set of languages is small and arbitrary: I already have most all these
 concepts developed in Ruby, Python, C, and Java -- see
 https://github.com/johnkerl/scripts and https://github.com/johnkerl/ctools.
-Here I focus on **new** languages, in particular those supporting modern closure
-and concurrency paradigms: the JVM languages **Scala**, **Clojure**, and **Groovy**;
-the systems languages **Go** and **Rust**; and the concurrency grandfather-language
-**Erlang**.
+Here I focus on new languages, in particular those supporting **modern closure
+and concurrency paradigms**: the JVM languages **Scala**, **Clojure**, and
+**Groovy**; the systems languages **Go** and **Rust**; and the concurrency
+grandfather-language **Erlang**.
 
 The paradigms I explore here are ones that are standard for me -- sometimes
 these are the fun parts, and sometimes they are the necessary scaffolding. No
