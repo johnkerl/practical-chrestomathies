@@ -23,21 +23,21 @@ and concurrency paradigms: the JVM languages **Scala**, **Clojure**, and **Groov
 the systems languages **Go** and **Rust**; and the concurrency grandfather-language
 **Erlang**.
 
-The paradigms I explore are ones that are standard for me -- sometimes these
-are the fun parts, and sometimes they are the necessary scaffolding. No matter
-how appealing a language is, if I can't do basic things with such as troll
-through log files a line at a time or piping to a subprocess, it isn't useful
-to me.  Thus the focus here is on **practicality**, with an ongoing effort toward
+The paradigms I explore here are ones that are standard for me -- sometimes
+these are the fun parts, and sometimes they are the necessary scaffolding. No
+matter how appealing a language is, if I can't do basic things with such as
+trolling through log files a line at a time or piping to a subprocess, it isn't
+useful to me.  Thus the focus here is on **practicality**, with incremental
 **idiomaticity**. I prefer to get something up and running in a reasonably
 idiomatic way; I'm sure as time goes by I'll find more idiomatic ways to do
-things. Example: a checksummer in Go is single-threaded (as of this writing)
-but would benefit (in performance, as well as pedagogically) from overlapped
-computation and I/O: each in its own goroutine.
+things. Example: the checksummer program I wrote in Go is single-threaded (as
+of this writing), but would benefit (in performance, as well as pedagogically)
+from overlapped computation and I/O: each in its own goroutine.
 
-Scope is limited to each language's **standard library**, with an exception made
-for GNU-style getopt. I know there are lots of cool packages out there for lots
-of languages; getting into those would unacceptably enlarge the scope of this
-project.
+Dependencies are limited to this repo and each language's **standard library**,
+with an exception made for GNU-style getopt. I know there are lots of cool
+packages out there for lots of languages; getting into those would unacceptably
+enlarge the scope of this project.
 
 This is and will probably always be a **work in progress**. Most of the content
 at present is Scala and Go.
