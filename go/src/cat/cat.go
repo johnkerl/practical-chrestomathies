@@ -2,13 +2,10 @@
 // ./cat myfile.txt
 // -- or --
 // go run cat.go myfile.txt
-// go run cat.go -- cat.go
 
 package main
 
 import (
-	// xxx not ";" sep since unused-import error ... we really need easy
-	// import/not with "//".
 	"fmt"
 	"log"
 	"os"
@@ -20,33 +17,26 @@ import (
 func main() {
 	args := os.Args[1:]
 
-	ok := true
-	if len(args) == 0 {
-		ok = cat("-") && ok
-	} else {
-		for _, arg := range args {
-			ok = cat(arg) && ok // ok && cat(arg): not called after error
-		}
-	}
-	if ok {
-		os.Exit(0)
-	} else {
+	istream, err := argf(args)
+	if err != nil {
+		log.Println(err)
 		os.Exit(1)
+	}
+
+	err = cat(istream)
+
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 }
 
 // ----------------------------------------------------------------
-func cat(sourceName string) (ok bool) {
-	sourceStream := os.Stdin
-	if sourceName != "-" {
-		var err error
-		if sourceStream, err = os.Open(sourceName); err != nil {
-			log.Println(err)
-			return false
-		}
-	}
+func cat(istream io.Reader) error {
 
-	reader := bufio.NewReader(sourceStream)
+	reader := bufio.NewReader(istream)
 	eof := false
 
 	for !eof {
@@ -56,19 +46,29 @@ func cat(sourceName string) (ok bool) {
 			eof = true
 		} else if err != nil {
 			log.Println(err)
-			if sourceName != "-" {
-				sourceStream.Close()
-			}
-			return false
+			return err
 		} else {
-			// This is how to do a chomp:
-			//line = strings.TrimRight(line, "\n")
 			fmt.Print(line)
 		}
 	}
-	if sourceName != "-" {
-		sourceStream.Close()
-	}
 
-	return true
+	return nil
+}
+
+// ----------------------------------------------------------------
+func argf(filenames []string) (io.Reader, error) {
+	if len(filenames) == 0 {
+		return os.Stdin, nil
+	} else {
+		readers := make([]io.Reader, len(filenames))
+		for i, filename := range(filenames) {
+			handle, err := os.Open(filename)
+			if err == nil {
+				readers[i] = handle
+			} else {
+				return nil, err
+			}
+		}
+		return io.MultiReader(readers...), nil
+	}
 }
