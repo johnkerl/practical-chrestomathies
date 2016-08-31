@@ -9,13 +9,10 @@
 package main
 
 import (
-	// xxx not ";" sep since unused-import error ... we really need easy
-	// import/not with "//".
 	"flag"
 	"fmt"
 	"os"
 	"io"
-	//"bytes"
 	"log"
 )
 
@@ -37,32 +34,23 @@ func main() {
 
 	doRaw := *pDoRaw
 
-	ok := true
-	if len(args) == 0 {
-		ok = hexDump("-", doRaw) && ok
-	} else {
-		for _, arg := range args {
-			ok = hexDump(arg, doRaw) && ok // ok && count(arg): not called after error
-		}
-	}
-	if ok {
-		os.Exit(0)
-	} else {
+	istream, err := argf(args)
+	if err != nil {
+		log.Println(err)
 		os.Exit(1)
 	}
+
+	err = hexDump(istream, doRaw)
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+
+	os.Exit(0)
 }
 
 // ----------------------------------------------------------------
-func hexDump(sourceName string, doRaw bool) (ok bool) {
-
-	sourceStream := os.Stdin
-	if sourceName != "-" {
-		var err error
-		if sourceStream, err = os.Open(sourceName); err != nil {
-			log.Println(err)
-			return false
-		}
-	}
+func hexDump(sourceStream io.Reader, doRaw bool) error {
 
 	bytesPerClump := 4
 	clumpsPerLine := 4
@@ -75,14 +63,10 @@ func hexDump(sourceName string, doRaw bool) (ok bool) {
 	for !eof {
 		numBytesRead, err := sourceStream.Read(buffer)
 		if err == io.EOF {
-			err = nil
 			eof = true
 		} else if err != nil {
 			log.Println(err)
-			if sourceName != "-" {
-				sourceStream.Close()
-			}
-			return false
+			return err
 		} else {
 			// Print offset "pre" part
 			if (!doRaw) {
@@ -127,9 +111,23 @@ func hexDump(sourceName string, doRaw bool) (ok bool) {
 		}
 	}
 
-	if sourceName != "-" {
-		sourceStream.Close()
-	}
+	return nil
+}
 
-	return true
+// ----------------------------------------------------------------
+func argf(filenames []string) (io.Reader, error) {
+	if len(filenames) == 0 {
+		return os.Stdin, nil
+	} else {
+		readers := make([]io.Reader, len(filenames))
+		for i, filename := range(filenames) {
+			handle, err := os.Open(filename)
+			if err == nil {
+				readers[i] = handle
+			} else {
+				return nil, err
+			}
+		}
+		return io.MultiReader(readers...), nil
+	}
 }
