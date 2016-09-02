@@ -1,10 +1,6 @@
-// go build hex.go
-// ./hex myfile.txt
-// -- or --
-// go run hex.go myfile.txt
-// go run hex.go -- hex.go
-
-// http://stackoverflow.com/questions/1821811/how-to-read-write-from-to-file
+// From /path/to/practical-chrestomathies/go:
+// export GOPATH=$(pwd)
+// go build hex
 
 package main
 
@@ -14,6 +10,7 @@ import (
 	"os"
 	"io"
 	"log"
+	"argf"
 )
 
 // ----------------------------------------------------------------
@@ -34,7 +31,7 @@ func main() {
 
 	doRaw := *pDoRaw
 
-	istream, err := argf(args)
+	istream, err := argf.Open(args)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
@@ -112,22 +109,4 @@ func hexDump(sourceStream io.Reader, doRaw bool) error {
 	}
 
 	return nil
-}
-
-// ----------------------------------------------------------------
-func argf(filenames []string) (io.Reader, error) {
-	if len(filenames) == 0 {
-		return os.Stdin, nil
-	} else {
-		readers := make([]io.Reader, len(filenames))
-		for i, filename := range(filenames) {
-			handle, err := os.Open(filename)
-			if err == nil {
-				readers[i] = handle
-			} else {
-				return nil, err
-			}
-		}
-		return io.MultiReader(readers...), nil
-	}
 }

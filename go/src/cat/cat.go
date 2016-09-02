@@ -1,7 +1,6 @@
-// go build cat.go
-// ./cat myfile.txt
-// -- or --
-// go run cat.go myfile.txt
+// From /path/to/practical-chrestomathies/go:
+// export GOPATH=$(pwd)
+// go build cat
 
 package main
 
@@ -11,13 +10,14 @@ import (
 	"os"
 	"bufio"
 	"io"
+	"argf"
 )
 
 // ----------------------------------------------------------------
 func main() {
 	args := os.Args[1:]
 
-	istream, err := argf(args)
+	istream, err := argf.Open(args)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
@@ -53,22 +53,4 @@ func cat(istream io.Reader) error {
 	}
 
 	return nil
-}
-
-// ----------------------------------------------------------------
-func argf(filenames []string) (io.Reader, error) {
-	if len(filenames) == 0 {
-		return os.Stdin, nil
-	} else {
-		readers := make([]io.Reader, len(filenames))
-		for i, filename := range(filenames) {
-			handle, err := os.Open(filename)
-			if err == nil {
-				readers[i] = handle
-			} else {
-				return nil, err
-			}
-		}
-		return io.MultiReader(readers...), nil
-	}
 }
