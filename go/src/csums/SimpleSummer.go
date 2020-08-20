@@ -5,7 +5,7 @@ import (
 )
 
 type SimpleSummer struct {
-	// extends Checksummer is not needed in go.  just impl the fncs.
+	// extends Checksummer is not needed in go.  just implement the functions.
 	byteCount uint64
 	byteSum   uint64
 }

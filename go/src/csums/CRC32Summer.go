@@ -7,7 +7,7 @@ import (
 )
 
 type CRC32Summer struct {
-	// extends Checksummer is not needed in go.  just impl the fncs.
+	// extends Checksummer is not needed in go.  just implement the functions.
 	hash32 hash.Hash32
 }
 
