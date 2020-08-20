@@ -9,13 +9,13 @@ package main
 import (
 	// xxx not ";" sep since unused-import error ... we really need easy
 	// import/not with "//".
+	"bufio"
 	"flag"
 	"fmt"
-	"os"
-	"bufio"
 	"io"
-	"strings"
 	"log"
+	"os"
+	"strings"
 )
 
 // ----------------------------------------------------------------
@@ -39,7 +39,7 @@ func main() {
 	countLines := *pCountLines
 	countWords := *pCountWords
 	countChars := *pCountChars
-	if (!countLines && !countWords && !countChars) {
+	if !countLines && !countWords && !countChars {
 		countLines = true
 		countWords = true
 		countChars = true
@@ -108,13 +108,13 @@ func count(sourceName string, countLines bool, countWords bool,
 		sourceStream.Close()
 	}
 
-	if (countLines) {
+	if countLines {
 		fmt.Printf(" %4d", numLines)
 	}
-	if (countWords) {
+	if countWords {
 		fmt.Printf(" %4d", numWords)
 	}
-	if (countChars) {
+	if countChars {
 		fmt.Printf(" %4d", numChars)
 	}
 	fmt.Println(" ", sourceName)

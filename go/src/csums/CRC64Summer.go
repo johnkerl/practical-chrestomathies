@@ -1,6 +1,6 @@
 package csums
 
-import(
+import (
 	"fmt"
 	"hash"
 	"hash/crc64"
@@ -26,7 +26,7 @@ func (summer *CRC64Summer) Start() {
 
 func (summer *CRC64Summer) Accumulate(bytes []byte, n int) {
 	// xxx what if n<len ... fix me ...
-	if (n < len(bytes)) {
+	if n < len(bytes) {
 		// xxx n int, err error
 		summer.hash64.Write(bytes[0:n])
 	} else {

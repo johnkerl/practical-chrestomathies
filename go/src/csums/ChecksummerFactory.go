@@ -1,13 +1,16 @@
 package csums
-import("errors")
 
-var ChecksummerFactoryAlgoNames = []string {
+import (
+	"errors"
+)
+
+var ChecksummerFactoryAlgoNames = []string{
 	"simple", "eth", "adler32", "crc32", "crc64", "fnv32", "fnv32a", "fnv64", "fnv64a",
 }
 
 // needs an idiomatic go-style case statement -- ?
 func ChecksummerFactory(name string) (summer Checksummer, err error) {
-    if name == "eth" {
+	if name == "eth" {
 		return new(EthSummer), nil
 	}
 	if name == "simple" {
@@ -36,5 +39,5 @@ func ChecksummerFactory(name string) (summer Checksummer, err error) {
 	if name == "fnv64a" {
 		return NewFNVSummer(name), nil
 	}
-	return nil, errors.New("ChecksummerFactory: unrecognized name \""+name+"\"")
+	return nil, errors.New("ChecksummerFactory: unrecognized name \"" + name + "\"")
 }

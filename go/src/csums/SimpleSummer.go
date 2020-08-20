@@ -1,16 +1,18 @@
 package csums
 
-import("fmt")
+import (
+	"fmt"
+)
 
 type SimpleSummer struct {
 	// extends Checksummer is not needed in go.  just impl the fncs.
-    byteCount uint64
+	byteCount uint64
 	byteSum   uint64
 }
 
 func (simpleSummer *SimpleSummer) Start() {
-    simpleSummer.byteCount = 0
-    simpleSummer.byteSum   = 0
+	simpleSummer.byteCount = 0
+	simpleSummer.byteSum = 0
 }
 
 func (simpleSummer *SimpleSummer) Accumulate(bytes []byte, n int) {

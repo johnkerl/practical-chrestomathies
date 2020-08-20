@@ -1,20 +1,22 @@
 package csums
 
-import("fmt")
+import (
+	"fmt"
+)
 
 type EthSummer struct {
 	// extends Checksummer is not needed in go.  just impl the fncs.
-    sum uint32
+	sum uint32
 }
 
 func (ethSummer *EthSummer) Start() {
-    ethSummer.sum = 0xffffffff
+	ethSummer.sum = 0xffffffff
 }
 
 func (ethSummer *EthSummer) Accumulate(bytes []byte, n int) {
 	localSum := ethSummer.sum
 	for i := 0; i < n; i++ {
-		localSum = crc_table[(localSum ^ uint32(bytes[i])) & 0xff] ^ (localSum >> 8)
+		localSum = crc_table[(localSum^uint32(bytes[i]))&0xff] ^ (localSum >> 8)
 	}
 	ethSummer.sum = localSum
 }
@@ -31,7 +33,7 @@ func (ethSummer EthSummer) GetStringSum() (sum string) {
 	return fmt.Sprintf("0x%08x", ethSummer.sum)
 }
 
-var crc_table = []uint32 {
+var crc_table = []uint32{
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
 	0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
 	0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -95,4 +97,4 @@ var crc_table = []uint32 {
 	0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6,
 	0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf,
 	0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
-	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d }
+	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d}

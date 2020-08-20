@@ -1,6 +1,6 @@
 package csums
 
-import(
+import (
 	"fmt"
 	"hash"
 	"hash/adler32"
@@ -25,7 +25,7 @@ func (summer *Adler32Summer) Start() {
 
 func (summer *Adler32Summer) Accumulate(bytes []byte, n int) {
 	// xxx what if n<len ... fix me ...
-	if (n < len(bytes)) {
+	if n < len(bytes) {
 		// xxx n int, err error
 		summer.hash32.Write(bytes[0:n])
 	} else {

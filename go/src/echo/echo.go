@@ -1,10 +1,11 @@
 // go build echo.go
 // ./echo a b c
 package main
+
 import (
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 func main() {

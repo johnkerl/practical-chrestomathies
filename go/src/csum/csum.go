@@ -31,11 +31,11 @@ func usage() {
 // ----------------------------------------------------------------
 func main() {
 	// http://golang.org/pkg/flag
-	pDoSpin   := flag.Bool("spin", false, "print running checksums to screen (default off)")
+	pDoSpin := flag.Bool("spin", false, "print running checksums to screen (default off)")
 	// xxx string-set ... maybe do my own non-flag here?
 	// xxx make a list-algos opt ...
 	algoNames := strings.Join(csums.ChecksummerFactoryAlgoNames, ", ")
-	pAlgo    := flag.String("algo", "crc64", "One of: " + algoNames + ".")
+	pAlgo := flag.String("algo", "crc64", "One of: "+algoNames+".")
 
 	flag.Usage = usage
 	flag.Parse()
@@ -43,7 +43,7 @@ func main() {
 	doSpin := *pDoSpin
 
 	checksummer, err := csums.ChecksummerFactory(*pAlgo)
-	if (checksummer == nil) {
+	if checksummer == nil {
 		log.Fatal(err)
 	}
 
@@ -80,11 +80,11 @@ func csum(fileName string, checksummer csums.Checksummer, doSpin bool) (ok bool)
 	buffer := make([]byte, bufferSize)
 	eof := false
 	var nblocks uint64 = 0
-	var nbytes  uint64 = 0
+	var nbytes uint64 = 0
 
 	checksummer.Start()
 
-	if (doSpin) {
+	if doSpin {
 		fmt.Print("...")
 		os.Stdout.Sync()
 	}
@@ -101,13 +101,13 @@ func csum(fileName string, checksummer csums.Checksummer, doSpin bool) (ok bool)
 			}
 			return false
 		} else {
-			nblocks ++
+			nblocks++
 			nbytes += uint64(numBytesRead)
 
 			checksummer.Accumulate(buffer, numBytesRead)
 
-			if (doSpin && ((nblocks & 0x3ff) == 0)) {
-				fmt.Print("\r"+checksummer.GetStringState())
+			if doSpin && ((nblocks & 0x3ff) == 0) {
+				fmt.Print("\r" + checksummer.GetStringState())
 				os.Stdout.Sync()
 			}
 		}
@@ -120,7 +120,7 @@ func csum(fileName string, checksummer csums.Checksummer, doSpin bool) (ok bool)
 	checksummer.Finish()
 	stringSum := checksummer.GetStringSum()
 
-	if (doSpin) {
+	if doSpin {
 		fmt.Print("\r")
 	}
 	fmt.Printf("%s  %6d  %s\n", stringSum, nbytes, fileName)

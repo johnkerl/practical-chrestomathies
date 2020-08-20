@@ -15,10 +15,14 @@ func main() {
 	pcmd := exec.Command("bash", "-c", strings.Join(os.Args[1:], "\n"))
 
 	o, oerr := pcmd.StdoutPipe()
-	if oerr != nil { log.Fatal(oerr) }
+	if oerr != nil {
+		log.Fatal(oerr)
+	}
 
 	serr := pcmd.Start()
-	if serr != nil { log.Fatal(serr) }
+	if serr != nil {
+		log.Fatal(serr)
+	}
 
 	reader := bufio.NewReader(o)
 	eof := false

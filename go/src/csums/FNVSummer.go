@@ -1,6 +1,6 @@
 package csums
 
-import(
+import (
 	"fmt"
 	"hash"
 	"hash/fnv"
@@ -46,7 +46,7 @@ func (summer *FNVSummer) Accumulate(bytes []byte, n int) {
 
 	// xxx what if n<len ... fix me ...
 	if summer.hash32 != nil {
-		if (n < len(bytes)) {
+		if n < len(bytes) {
 			// xxx n int, err error
 			summer.hash32.Write(bytes[0:n])
 		} else {
@@ -56,7 +56,7 @@ func (summer *FNVSummer) Accumulate(bytes []byte, n int) {
 
 	// xxx what if n<len ... fix me ...
 	if summer.hash64 != nil {
-		if (n < len(bytes)) {
+		if n < len(bytes) {
 			// xxx n int, err error
 			summer.hash64.Write(bytes[0:n])
 		} else {
@@ -75,7 +75,7 @@ func (summer FNVSummer) GetStringState() (state string) {
 
 func (summer FNVSummer) GetStringSum() (sum string) {
 	var s string
-	if (summer.hash32 != nil) {
+	if summer.hash32 != nil {
 		s = fmt.Sprintf("0x%08x", summer.hash32.Sum32())
 	} else {
 		s = fmt.Sprintf("0x%016x", summer.hash64.Sum64())

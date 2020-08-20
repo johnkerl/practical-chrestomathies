@@ -5,5 +5,5 @@ type Checksummer interface {
 	Accumulate(bytes []byte, len int)
 	Finish()
 	GetStringState() string
-	GetStringSum()   string
+	GetStringSum() string
 }

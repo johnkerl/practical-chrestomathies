@@ -33,21 +33,21 @@ func main() {
 	args := flag.Args()
 	doCleanOnly := *pDoCleanOnly
 
-	ok    := true
+	ok := true
 	clean := true
 	if len(args) == 0 {
 		currOk, currClean := bytehistoDump("-", doCleanOnly)
 		// &&= DNE?!?
-		ok    = ok    && currOk
+		ok = ok && currOk
 		clean = clean && currClean
 	} else {
 		for _, arg := range args {
 			currOk, currClean := bytehistoDump(arg, doCleanOnly) // ok && count(arg): not called after error
-			ok    = ok    && currOk
+			ok = ok && currOk
 			clean = clean && currClean
 		}
 	}
-	if (doCleanOnly) {
+	if doCleanOnly {
 		ok = ok && clean
 	}
 	if ok {
@@ -98,21 +98,21 @@ func bytehistoDump(sourceName string, doCleanOnly bool) (ok bool, clean bool) {
 		sourceStream.Close()
 	}
 
-	clean     = true
+	clean = true
 	minCount := int64(1)
 	maxCount := int64(0)
-	minByte  := int32(257)
-	maxByte  := int32(0)
+	minByte := int32(257)
+	maxByte := int32(0)
 
 	for i := 0; i < 256; i++ {
-		if (counts[i] < minCount) {
+		if counts[i] < minCount {
 			minCount = counts[i]
 		}
-		if (counts[i] > maxCount) {
+		if counts[i] > maxCount {
 			maxCount = counts[i]
 		}
-		if (counts[i] != 0) {
-			if (minByte == 257) {
+		if counts[i] != 0 {
+			if minByte == 257 {
 				minByte = int32(i)
 			}
 			maxByte = int32(i)
@@ -123,7 +123,7 @@ func bytehistoDump(sourceName string, doCleanOnly bool) (ok bool, clean bool) {
 	if sourceName == "-" {
 		printName = "[stdin]"
 	}
-	if (!doCleanOnly) {
+	if !doCleanOnly {
 		fmt.Printf("----------------------------------------------------------------\n")
 		fmt.Printf("%s:\n", printName)
 	}
@@ -132,33 +132,33 @@ func bytehistoDump(sourceName string, doCleanOnly bool) (ok bool, clean bool) {
 
 	for i := 0; i < 32; i++ {
 		for j := 0; j < 8; j++ {
-			n := i + 32 * j
+			n := i + 32*j
 			// Go will print various Unicode things but for my purposes I want
 			// to know if a text file is ASCII clean.  So I'm not using
 			// strconv.IsPrint here.
 			isprint := (n == 0x09) || (n == 0x0a) || ((n >= 0x20) && (n <= 0x7e))
-			if (counts[n] != 0) {
+			if counts[n] != 0 {
 				clean = clean && isprint
 			}
 
-			if (!doCleanOnly) {
-				if (isprint && (n != ' ') && (n != '\t')) {
+			if !doCleanOnly {
+				if isprint && (n != ' ') && (n != '\t') {
 					fmt.Printf("%2c", n)
 				} else {
 					fmt.Printf("%02x", n)
 				}
 				fmt.Printf(": %-5d", counts[n])
-				if (j == 7) {
+				if j == 7 {
 					fmt.Printf(" ")
 				}
 			}
 		}
-		if (!doCleanOnly) {
+		if !doCleanOnly {
 			fmt.Printf("\n")
 		}
 	}
-	if (!doCleanOnly) {
-		if (maxCount > 0) {
+	if !doCleanOnly {
+		if maxCount > 0 {
 			fmt.Printf("Min byte : %-3d (0x%02x)  Max byte : %-3d (0x%02x)\n", minByte, minByte, maxByte, maxByte)
 		}
 		fmt.Printf("Min count: %-6d  Max count: %-6d\n", minCount, maxCount)

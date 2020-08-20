@@ -1,4 +1,5 @@
 package main
+
 import (
 	"fmt"
 	"os"
@@ -13,14 +14,14 @@ func main() {
 			os.Args[0])
 		os.Exit(1)
 	}
-	for _, arg := range(args) {
+	for _, arg := range args {
 		// strconv.Atoi() doesn't do longs.
 		var ms int64
 		_, err := fmt.Sscanf(arg, "%d", &ms)
 		if err == nil {
-			s  := ms/1000
-			ns := (ms%1000)*1000*1000
-			t  := time.Unix(s, ns)
+			s := ms / 1000
+			ns := (ms % 1000) * 1000 * 1000
+			t := time.Unix(s, ns)
 			fmt.Println(t)
 		} else {
 			fmt.Fprintf(os.Stderr, "%s: can't parse \"%s\" as millis.\n",

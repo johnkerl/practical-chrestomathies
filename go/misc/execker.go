@@ -1,6 +1,7 @@
 // go build hello.go
 // ./hello a b c
 package main
+
 import (
 	"fmt"
 	"log"
@@ -20,11 +21,11 @@ func main() {
 
 	fmt.Printf("done\n")
 
-//	out, err := pcmd.Output()
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	fmt.Printf("Output:\n")
-//	fmt.Printf("%s\n", out)
+	//	out, err := pcmd.Output()
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	}
+	//	fmt.Printf("Output:\n")
+	//	fmt.Printf("%s\n", out)
 
 }
