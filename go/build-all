@@ -5,7 +5,6 @@ export GOPATH=$(pwd)
 set -ex
 go build bytehisto
 go build cat
-go build csum
 go build echo
 go build hello
 go build hex
@@ -13,3 +12,8 @@ go build millis2gmt
 go build nowmillis
 go build stamplines
 go build wc
+
+cd src/csum
+export GOPATH=$(pwd)
+go build csum.go
+mv csum ../..
