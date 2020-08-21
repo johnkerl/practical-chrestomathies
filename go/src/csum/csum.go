@@ -9,8 +9,6 @@
 package main
 
 import (
-	// xxx not ";" sep since unused-import error ... we really need easy
-	// import/not with "//".
 	"csums"
 	"flag"
 	"fmt"
