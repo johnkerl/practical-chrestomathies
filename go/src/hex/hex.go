@@ -58,54 +58,59 @@ func hexDump(sourceStream io.Reader, doRaw bool) error {
 	offset := 0
 
 	for !eof {
-		numBytesRead, err := sourceStream.Read(buffer)
+		numBytesRead, err := io.ReadFull(sourceStream, buffer)
 		if err == io.EOF {
 			eof = true
-		} else if err != nil {
+			break
+		}
+		// io.ErrUnexpectedEOF is the normal case when the file size isn't an
+		// exact multiple of our buffer size.
+		if err != nil && err != io.ErrUnexpectedEOF {
 			log.Println(err)
 			return err
-		} else {
-			// Print offset "pre" part
-			if !doRaw {
-				fmt.Printf("%08x: ", offset)
-			}
-
-			// Print hex payload
-			for i := 0; i < bufferSize; i++ {
-				if i < numBytesRead {
-					fmt.Printf("%02x ", buffer[i])
-				} else {
-					fmt.Printf("   ")
-				}
-				if (i % bytesPerClump) == (bytesPerClump - 1) {
-					if (i > 0) && (i < bufferSize-1) {
-						fmt.Printf(" ")
-					}
-				}
-			}
-
-			// Print ASCII-dump "post" part
-			if !doRaw {
-				fmt.Printf("|")
-
-				for i := 0; i < numBytesRead; i++ {
-					if buffer[i] >= 0x20 && buffer[i] <= 0x7e {
-						fmt.Printf("%c", buffer[i])
-					} else {
-						fmt.Printf(".")
-					}
-				}
-				for i := numBytesRead; i < bufferSize; i++ {
-					fmt.Print(" ")
-				}
-				fmt.Printf("|")
-			}
-
-			// Print line end
-			fmt.Printf("\n")
-
-			offset += numBytesRead
 		}
+
+		// Print offset "pre" part
+		if !doRaw {
+			fmt.Printf("%08x: ", offset)
+		}
+
+		// Print hex payload
+		for i := 0; i < bufferSize; i++ {
+			if i < numBytesRead {
+				fmt.Printf("%02x ", buffer[i])
+			} else {
+				fmt.Printf("   ")
+			}
+			if (i % bytesPerClump) == (bytesPerClump - 1) {
+				if (i > 0) && (i < bufferSize-1) {
+					fmt.Printf(" ")
+				}
+			}
+		}
+
+		// Print ASCII-dump "post" part
+		if !doRaw {
+			fmt.Printf("|")
+
+			for i := 0; i < numBytesRead; i++ {
+				if buffer[i] >= 0x20 && buffer[i] <= 0x7e {
+					fmt.Printf("%c", buffer[i])
+				} else {
+					fmt.Printf(".")
+				}
+			}
+			for i := numBytesRead; i < bufferSize; i++ {
+				fmt.Print(" ")
+			}
+			fmt.Printf("|")
+		}
+
+		// Print line end
+		fmt.Printf("\n")
+
+		offset += numBytesRead
+
 	}
 
 	return nil
