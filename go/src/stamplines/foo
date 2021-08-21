@@ -1,4 +1,0 @@
-#!/bin/bash
-r=$[RANDOM/20]
-millisleep $r
-echo $r

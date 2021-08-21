@@ -5,12 +5,13 @@
 package main
 
 import (
-	"argf"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
+
+	"github.com/johnkerl/practical-chrestomathies/go/lib/argf"
 )
 
 // ----------------------------------------------------------------

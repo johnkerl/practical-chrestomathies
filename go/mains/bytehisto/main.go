@@ -128,15 +128,13 @@ func bytehistoDump(sourceName string, doCleanOnly bool) (ok bool, clean bool) {
 		fmt.Printf("%s:\n", printName)
 	}
 
-	// xxx separate methods for file read, stats collect, table print ...
-
 	for i := 0; i < 32; i++ {
 		for j := 0; j < 8; j++ {
 			n := i + 32*j
 			// Go will print various Unicode things but for my purposes I want
 			// to know if a text file is ASCII clean.  So I'm not using
 			// strconv.IsPrint here.
-			isprint := (n == 0x09) || (n == 0x0a) || ((n >= 0x20) && (n <= 0x7e))
+			isprint := (n == 0x09) || ((n >= 0x20) && (n <= 0x7e))
 			if counts[n] != 0 {
 				clean = clean && isprint
 			}

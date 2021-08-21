@@ -1,4 +1,3 @@
-// xxx to do: github.com/johnkerl/...
 package simpletimeformat
 
 import (

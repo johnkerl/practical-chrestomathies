@@ -19,7 +19,7 @@ import (
 	"strings"
 	"time"
 
-	"simpletimeformat"
+	"github.com/johnkerl/practical-chrestomathies/go/lib/simpletimeformat"
 )
 
 func main() {

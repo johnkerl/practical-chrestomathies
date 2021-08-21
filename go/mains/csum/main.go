@@ -9,13 +9,14 @@
 package main
 
 import (
-	"csums"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/johnkerl/practical-chrestomathies/go/lib/csums"
 )
 
 // ----------------------------------------------------------------

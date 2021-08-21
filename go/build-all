@@ -1,19 +1,9 @@
 #!/bin/bash
 
-export GOPATH=$(pwd)
+set -xeuo pipefail
 
-set -ex
-go build bytehisto
-go build cat
-go build echo
-go build hello
-go build hex
-go build millis2gmt
-go build nowmillis
-go build stamplines
-go build wc
-
-cd src/csum
-export GOPATH=$(pwd)
-go build csum.go
-mv csum ../..
+for x in $(ls mains); do
+  cd mains/$x
+  go build
+  cd ../..
+done

@@ -1,12 +1,7 @@
 #!/bin/bash
 
-rm -f ./bytehisto
-rm -f ./cat
-rm -f ./csum
-rm -f ./echo
-rm -f ./hello
-rm -f ./hex
-rm -f ./millis2gmt
-rm -f ./nowmillis
-rm -f ./stamplines
-rm -f ./wc
+set -xeuo pipefail
+
+for x in $(ls mains); do
+  rm mains/$x/$x
+done
