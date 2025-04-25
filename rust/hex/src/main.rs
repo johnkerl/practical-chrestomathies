@@ -6,8 +6,8 @@ fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
 
     if args.len() > 1 {
-        for (_, arg) in args.iter().skip(1).enumerate() {
-            let file = fs::File::open(&arg)?;
+        for arg in args.iter().skip(1) {
+            let file = fs::File::open(arg)?;
             let reader = io::BufReader::new(file);
             process_bytes(reader)?
         }
@@ -20,9 +20,9 @@ fn main() -> io::Result<()> {
 }
 
 fn process_bytes<R: io::Read>(mut reader: R) -> io::Result<()> {
-    const BUFFER_SIZE: usize = 16;
-    const BYTES_PER_CLUMP: usize = 4;
-    let mut buffer = [0u8; BUFFER_SIZE];
+    const BUFSZ: usize = 16;
+    const CLUMPSZ: usize = 4;
+    let mut buffer = [0u8; BUFSZ];
     let mut offset = 0;
 
     loop {
@@ -33,30 +33,26 @@ fn process_bytes<R: io::Read>(mut reader: R) -> io::Result<()> {
                 print!("{offset:08x}:");
 
                 // Print the hex payload
-                for i in 0..BUFFER_SIZE {
+                for (i, v) in buffer.iter().enumerate().take(BUFSZ) {
                     if i < num_bytes_read {
-                        let v = buffer[i];
                         print!(" {v:02x}");
                     } else {
                         print!("   ")
                     }
-                    if (i % BYTES_PER_CLUMP) == (BYTES_PER_CLUMP - 1) {
-                        if (i > 0) && (i < BUFFER_SIZE - 1) {
-                            print!(" ")
-                        }
+                    if (i % CLUMPSZ) == (CLUMPSZ - 1) && (i > 0) && (i < BUFSZ - 1) {
+                        print!(" ")
                     }
                 }
 
                 // Print the ASCII dump after the hex payload
                 print!(" |");
 
-                for i in 0..BUFFER_SIZE {
+                for (i, v) in buffer.iter().enumerate().take(BUFSZ) {
                     if i < num_bytes_read {
-                        let v = buffer[i];
                         // Don't use ASCII is-print since we don't want to print
                         // tabs, carriage returns, etc as such.
                         if buffer[i] >= 0x20 && buffer[i] <= 0x7e {
-                            let c = v as char;
+                            let c = *v as char;
                             print!("{c}");
                         } else {
                             print!(".");
